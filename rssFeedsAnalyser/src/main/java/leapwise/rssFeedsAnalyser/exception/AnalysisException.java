@@ -3,11 +3,11 @@ package leapwise.rssFeedsAnalyser.exception;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class analysisException extends RuntimeException{
+public class AnalysisException extends RuntimeException{
 	
 	private int code;
 	
-	public analysisException(String message, int code) {
+	public AnalysisException(String message, int code) {
 		super(message);
 		this.setCode(code);
 	}
