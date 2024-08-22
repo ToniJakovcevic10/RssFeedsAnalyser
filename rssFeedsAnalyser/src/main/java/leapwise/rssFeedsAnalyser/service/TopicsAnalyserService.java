@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.rometools.rome.feed.synd.SyndEntry;
@@ -72,10 +73,12 @@ public class TopicsAnalyserService {
 						
 						// insert in the table feed and topic
 						for (Feed feed : possibleTopicMap.getValue()) {
-							feed.setTopic(topic);
+							topic.getFeeds().add(feed);
+							
+							feed.getTopics().add(topic);
 						}
 						// add feeds to the topic
-						topic.setFeeds(possibleTopicMap.getValue());
+//						topic.setFeeds(possibleTopicMap.getValue());
 						// add topic to the hotTopicsList
 						hotTopicsList.add(topic);
 					}
@@ -104,7 +107,11 @@ public class TopicsAnalyserService {
 		if (analysis.isPresent()) {
 			// get 3 topics from the DB
 			Pageable topThree = PageRequest.of(0, 3);
-			hotTopics = topicRepository.get3MostFrequentTopics(topThree);
+			try {
+				hotTopics = topicRepository.get3MostFrequentTopics(topThree);				
+			}catch (Exception e) {
+				throw new analysisException(String.format(e.toString()), 500);
+			}
 		} else {
 			throw new analysisException(String.format("Analysis not found by id: %s", analysisId), 801);
 		}

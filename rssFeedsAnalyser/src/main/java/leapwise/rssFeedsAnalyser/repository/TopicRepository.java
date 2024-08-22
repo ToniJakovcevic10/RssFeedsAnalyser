@@ -14,6 +14,6 @@ public interface TopicRepository extends CrudRepository<Topic, String>{
 
 	// Custom query to find the top 3 Topics ordered by counter descending
 //    @Query("SELECT t FROM Topic t ORDER BY t.feedsFrequency DESC")
-	@Query("SELECT DISTINCT t FROM Topic t LEFT JOIN FETCH t.feeds f ORDER BY t.feedsFrequency DESC")
+	@Query("SELECT t FROM Topic t LEFT JOIN FETCH t.feeds ORDER BY t.feedsFrequency DESC")
     List<Topic> get3MostFrequentTopics(Pageable pageable);
 }

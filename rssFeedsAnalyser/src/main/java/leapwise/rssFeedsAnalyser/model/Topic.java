@@ -1,5 +1,6 @@
 package leapwise.rssFeedsAnalyser.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,6 +14,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -32,13 +35,17 @@ public class Topic {
 	private int feedsFrequency;
 	
 	@ManyToOne
-	@JoinColumn(name="analysisId")
+	@JoinColumn(name="analysis_id")
 	@JsonIgnore
 	private Analysis analysis;
 	
-	@OneToMany(mappedBy="topic", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JsonManagedReference
-	private List<Feed> feeds;
+	 @ManyToMany(fetch=FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	    @JoinTable(
+	        name = "topic_feed",
+	        joinColumns = @JoinColumn(name = "topic_id"),
+	        inverseJoinColumns = @JoinColumn(name = "feed_id")
+	    )
+	private List<Feed> feeds = new ArrayList<Feed>();
 	
 	public Topic() {}
 	
