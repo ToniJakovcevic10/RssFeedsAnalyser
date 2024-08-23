@@ -69,9 +69,9 @@ public class RssAnalyserServiceImpl implements RssAnalyserService{
 						for (Feed feed : possibleTopicMap.getValue()) {
 							topic.getFeeds().add(feed);
 							
+							// add feeds to the topic
 							feed.getTopics().add(topic);
 						}
-						// add feeds to the topic
 						// add topic to the hotTopicsList
 						hotTopicsList.add(topic);
 					}

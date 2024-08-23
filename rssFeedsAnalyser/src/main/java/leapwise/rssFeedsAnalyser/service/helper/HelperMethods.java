@@ -1,5 +1,6 @@
 package leapwise.rssFeedsAnalyser.service.helper;
 
+import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -25,8 +26,7 @@ public class HelperMethods {
 		List<SyndFeed> rssList = new ArrayList<SyndFeed>();
 		try {
 			for (String url : urls) {
-				@SuppressWarnings("deprecation")
-				URL newsUrl = new URL(URLDecoder.decode(url, StandardCharsets.UTF_8.name()));
+				URL newsUrl = new URI(URLDecoder.decode(url, StandardCharsets.UTF_8.name())).toURL();
 				SyndFeedInput input = new SyndFeedInput();
 				rssList.add(input.build(new XmlReader(newsUrl)));
 			}
